@@ -7,6 +7,8 @@ import ctypes
 import time
 from _ctypes import Structure, POINTER, byref
 from ctypes import c_int, c_float
+import pyximport; pyximport.install()
+import multiplication
 
 import numpy as np
 
@@ -56,6 +58,7 @@ def python_multiplication(a,b):
 
 a = np.random.rand(2000,2000)
 b = np.random.rand(2000,2000)
+c = np.random.rand(2000,2000)
 
 print("Timing python multiplication:\n")
 start = time.time()
@@ -63,13 +66,23 @@ python_result = python_multiplication(a, b)
 end = time.time()
 print(end - start)
 
-print("Timing C multiplication:\n")
+print("Timing ctypes C multiplication:\n")
 c_result = c_multiplication(a, b)
+
+print("Timing cython multiplication:\n")
+start = time.time()
+python_result = multiplication.cython_multiplication(a, b, c, 2000, 2000)
+end = time.time()
+print(end - start)
 
 print("Timing numpy multiplication:\n")
 start = time.time()
 python_result = a * b
 end = time.time()
 print(end - start)
+
+np.multiply()
+
+
 
 
